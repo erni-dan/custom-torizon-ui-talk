@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/fastbootstrap@2.2.0/dist/css/fastbootstrap.min.css" rel="stylesheet" integrity="sha256-V6lu+OdYNKTKTsVFBuQsyIlDiRWiOmtC8VQ8Lzdm2i4=" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/plotly.js-dist@2.30.1/plotly.min.js" charset="utf-8"></script>
+
+    <link rel='stylesheet' href='/public/stylesheets/style.css' />
+    
+    <title>Document</title>
+</head>
+
+<body onload="addDeviceImage();">
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-1">
+                <div id="nav">
+                    <ul class="nav flex-column">
+                        <li class="nav-item mx-auto" style="margin-bottom: 30px;">
+                            <a class="navbar-brand" href="https://www.betterask.erni/">
+                                <img src="/public/img/ERNI_Emblem.png" alt="www.betterask.erni" title="www.betterask.erni" width="43.8" height="48" />
+                            </a>
+                        </li>
+                        <li class="nav-item mx-auto" style="margin-bottom: 30px;">
+                            <a class="navbar-brand" href="/">
+                                <img src="/public/img/home.png" alt="Home" title="Home"  width="32" />
+                            </a>
+                        </li>
+                        <li class="nav-item mx-auto" style="margin-bottom: 30px;">
+                            <a class="navbar-brand" href="https://app.torizon.io/#/fleets">
+                                <img src="/public/img/connect_icon.png" alt="Fleets" title="Fleets"  width="43.8" height="48" />
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-11">
+                <div id="nav_bar_horizontal">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                <ul class="nav">
+                                    <li class="nav-item">
+                                        <a class="navbar-brand" id="device_preview_icon" href="#">
+                                            <img src="/public/img/robot_icon.png" height="42" />
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="navbar-brand" href="#">
+                                            <% if (connected){ %>
+                                            <img src="/public/img/robot_icon_connected.png" alt="robot icon" style="height: 44px" />
+                                            <% } else{ %>  
+                                            <img src="/public/img/robot_icon_disconnected.png" alt="robot icon" style="height: 44px" />
+                                            <% } %>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col">
+                                <ul class="nav justify-content-end">
+                                    <li class="nav-item">
+                                        <a class="navbar-brand" href="https://app.torizon.io/#/">
+                                            <img src="/public/img/user.png" alt="access torizon user account" title="access torizon user account" width="43.8" height="48" />
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="navbar-brand" href="#">
+                                            <img src="/public/img/notifications.png" alt="dummy notifications registeration" title="dummy notifications registeration" width="43.8" height="48" />
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="device_info">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-sm">
+                                        <table>
+                                            <tr>
+                                                <th colspan="2">Hardware</th>
+                                            </tr>
+                                            <tr>
+                                                <td>Device ID:</td>
+                                                <td><%= deviceId %></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Uuid:</td>
+                                                <td><%= deviceUuid %></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Last seen:</td>
+                                                <td><%= lastSeen %></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Created:</td>
+                                                <td><%= createdAt %></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Activated:</td>
+                                                <td><%= activatedAt %></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-sm">
+                                        <table>
+                                            <tr>
+                                                <th colspan="2">Networks</th>
+                                            </tr>
+                                            <tr>
+                                                <td>Hostname:</td>
+                                                <td><%= networkInfo.hostname %></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Local IPv4:</td>
+                                                <td><%= networkInfo.localIpV4 %></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Mac:</td>
+                                                <td><%= networkInfo.macAddress %></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="col-sm">
+                                        <table>
+                                            <tr>
+                                                <th colspan="2">Fleets</th>
+                                            </tr>
+                                            <% if (deviceFleets.length){ %>
+                                            <% deviceFleets.forEach(function(fleet) { %>
+                                            <tr>
+                                                <td>Name:</td>
+                                                <td><%= fleet.name %></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Created:</td>
+                                                <td><%= fleet.createdAt %></td>
+                                            </tr>
+                                            <% }); %>
+                                            
+                                            <% } else{ %>  
+                                            <tr></tr>
+                                            <td>none</td>
+                                            </tr>
+                                            <% } %>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="application_data">
+                    <div class="card-deck">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 id="preview_title">Live Preview</h5>
+                                <div id="device_preview">
+                                    <video src="/public/img/0001-0350.mkv" type="video/mp4" class="card-img-top"
+                                        style="border-radius: 15px;" muted autoplay loop></video>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Memory used</h5>
+                                        <!-- Create a div for the memory used graph -->
+                                        <div class="responsive-plot" id="mem_plot"></div>
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Temperature</h5>
+                                        <!-- Create a div for the temperature graph -->
+                                        <div class="responsive-plot" id="temp_plot"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="update">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5>
+                                Update
+                                <% if (deviceStatus == "UpToDate"){ %>
+                                <span class="update_state" id="update_id" style="font-size: 60%; color: #26BF00"><img
+                                    src="/public/img/ok.png" /> No pending updates
+                                </span>
+                                <% } else{ %>  
+                                <span class="update_state" id="update_id" style="font-size: 60%; color: #BF2200"><img
+                                    src="/public/img/ok_red.png" /> Pending updates
+                                </span>
+                                <% } %>
+                            </h5>
+                            <div id="update-buttons">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <a class="btn btn-primary btn-sm btn-block text-left"
+                                                style="border-radius: 12px" onClick="requestUpdate()" href="javascript:void(0);">
+                                                <img src="/public/img/upload.png" /> Update Application
+                                            </a>
+                                            <div class="dropdown">
+                                                <button class="btn btn-outline-secondary border-0 dropdown-toggle"
+                                                    data-packageId="{{packages[0].packageId}}" type="button"
+                                                    id="dropdownUpdateApp" data-toggle="dropdown" aria-haspopup="true"
+                                                    aria-expanded="false">
+                                                    <%= packages[0].name %> (<%= packages[0].version %>)
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownUpdateApp">
+                                                    <% packages.forEach(function(pack) { %>
+                                                    <button class="dropdown-item" type="button"
+                                                        onclick="showSelectedAppPack(this)"
+                                                        data-packageId="{{pack.packageId}}"><%= pack.name %>
+                                                        (<%= pack.version %>)</button>
+                                                    <% }); %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <a class="btn btn-secondary btn-sm btn-block text-left"
+                                                style="border-radius: 12px"
+                                                onClick="alert('OS update not implemented!')" href="#">
+                                                <img src="/public/img/upload.png" /> Update OS
+                                            </a>
+                                            <div class="dropdown">
+                                                <button class="btn btn-outline-secondary border-0 dropdown-toggle" 
+                                                    type="button" id="dropdownUpdateOS" data-toggle="dropdown"
+                                                    aria-haspopup="true" aria-expanded="false">
+                                                    <%= os_packages_external[0].name.substring(0, 48) %>
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownUpdateOS">
+                                                    <% os_packages_external.forEach(function(pack) { %>
+                                                    <button class="dropdown-item" type="button"
+                                                        onclick="showSelectedOsPack(this)"><%= pack.name %>
+                                                        (<%= pack.version %>)</button>
+                                                    <% }); %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <a class="btn btn-secondary btn-sm btn-block text-left"
+                                                style="border-radius: 12px"
+                                                onClick="alert('Bootloader update not implemented!')" href="#">
+                                                <img src="/public/img/upload.png" /> Update Bootloader
+                                            </a>
+                                            <div class="dropdown">
+                                                <button class="btn btn-outline-secondary border-0 dropdown-toggle"
+                                                    type="button" id="dropdownUpdateBootloader" data-toggle="dropdown"
+                                                    aria-haspopup="true" aria-expanded="false">
+                                                    <%= bootloader_packages_external[0].name.substring(0, 48) %>
+                                                </button>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownUpdateBootloader">
+                                                    <% bootloader_packages_external.forEach(function(pack) { %>
+                                                    <button class="dropdown-item" type="button"
+                                                        onclick="showSelectedBootloaderPack(this)"><%= pack.name %>(<%= pack.version %>)
+                                                    </button>
+                                                    <% }); %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card" style="z-index: -1;">
+                        <div class="card-body">
+                            <h5>
+                                Update Status
+                                <% if (deviceStatus == "UpToDate"){ %>
+                                <span class="update_state"  id="update_state_id" >
+                                    <img src="/public/img/ok.png" />
+                                </span>
+                                <% } else{ %>  
+                                <span class="update_state"  id="update_state_id" >
+                                    <img src="/public/img/ok_red.png" />
+                                </span>
+                                <% } %>
+                            </h5>
+                            <div class="container">
+                                <div class="row">
+                                    <% devicePackages.forEach(function(pack) { %>
+                                    <div class="col-sm">
+                                        <table>
+                                            <tr>
+                                                <th colspan="2">
+                                                    <% if (pack.component.includes('bootloader')){ %>
+                                                    Bootloader
+                                                    <% } else if (pack.component.includes('docker')) { %>
+                                                    Application
+                                                    <% } else { %>
+                                                    OS
+                                                    <% } %>
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <td>Type:</td>
+                                                <td><%= pack.component %></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Name:</td>
+                                                <td><%= pack.name %></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Version:</td>
+                                                <td><%= pack.version %></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Hash:</td>
+                                                <td><%= pack.checksum.substring(0, 8) %></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <% }); %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function requestUpdate(item) {
+            btn = document.getElementById("dropdownUpdateApp");
+            packId = btn.getAttribute('data-packageId');
+
+            data = { device_id: "{{deviceUuid}}" };
+            data['package_id'] = packId;
+
+            $.ajax({
+                url: '/update',
+                type: "GET",
+                data: data,
+                success: function (response) {
+                    //change the update status to pending
+                    document.getElementById("update_state_id").innerHTML = "<img src='/public/img/ok_red.png' />";
+                    document.getElementById("update_id").innerHTML = "<img src='/public/img/ok_red.png' /><span style='color: #BF2200'>Pending updates</span>";
+
+                    alert('Update successfully assigned to device : ' + "{{deviceUuid}}");
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert('Failed to started update! ' + xhr.status + " " + thrownError + " " + xhr.responseText);
+                }
+            });
+        }
+
+        function showSelectedAppPack(item) {
+            new_packId = item.getAttribute('data-packageId');
+            btn = document.getElementById("dropdownUpdateApp");
+            btn.setAttribute('data-packageId', new_packId);
+            btn.innerHTML = item.innerHTML;
+        }
+
+        function showSelectedOsPack(item) {
+            //trim the string to fit in under button
+            document.getElementById("dropdownUpdateOS").innerHTML = item.innerHTML.substring(0, 48) + "...";
+        }
+
+        function showSelectedBootloaderPack(item) {
+            //trim the string to fit in under button
+            document.getElementById("dropdownUpdateBootloader").innerHTML = item.innerHTML.substring(0, 48) + "...";
+        }
+    </script>
+
+    <script>
+        var layout = {
+            minreducedwidth: 200,
+            height: 250,
+            margin: {
+                t: 0
+            },
+            autosize: true // set autosize to rescale
+        };
+
+        var config = {
+            'displayModeBar': false // set to false to hide the icons on top of the graph
+        }
+
+        var temp_graph = {
+            x: [
+                <% temp_x.forEach(function(time) { %>
+                    "<%= time %>",
+                <% }); %>
+            ],
+            y: [<%= temp_y %>],
+        type: 'scatter'
+        };
+        Plotly.newPlot('temp_plot', [temp_graph], layout, config);
+
+        var mem_graph = {
+            x: [
+                <% mem_used_x.forEach(function(time) { %>
+                    "<%= time %>",
+                <% }); %>
+            ],
+            y: [<%= mem_used_y %>],
+        type: 'scatter'
+        };
+
+        var layout_mem = {
+            minreducedwidth: 200,
+            height: 250,
+            margin: {
+                t: 0
+            },
+            autosize: true // set autosize to rescale
+        };
+
+        var config_mem = {
+            'displayModeBar': false // set to false to hide the icons on top of the graph
+        }
+        Plotly.newPlot('mem_plot', [mem_graph], layout_mem, config_mem);
+
+        // update the layout to expand to the available size when the window is resized
+        window.onresize = function () {
+            Plotly.relayout('temp_plot', {
+                'xaxis.autorange': true,
+                'yaxis.autorange': true,
+            });
+
+            Plotly.relayout('mem_plot', {
+                'xaxis.autorange': true,
+                'yaxis.autorange': true,
+            });
+        };
+    </script>
+
+    <script>
+        //HINT: This function is called when the page is loaded and substitutes the device image and icon
+        //      Remove the comments below to use your personal device image and icon
+
+        function addDeviceImage() {
+        //    var deviceImage = document.getElementById("device_preview");
+        //    var deviceImageSrc = "/public/img/robot_icon.png";  // TODO: replace with your device image
+        //    deviceImage.innerHTML = "<img src='" + deviceImageSrc + "' class='card-img-top' style='border-radius: 15px;'>";
+
+        //    var deviceIconImage = document.getElementById("device_preview_icon");
+        //    var deviceIconImageSrc = "/public/img/robot_icon.png";  // TODO: replace with your device icon image
+        //    deviceIconImage.innerHTML = "<img src='" + deviceIconImageSrc + "' height='42'>";
+        }
+    </script>
+</body>
+
+</html>
